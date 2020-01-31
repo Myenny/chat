@@ -10,7 +10,6 @@ const mutations = {
 		state.userDetails = payload
 	},
 	addUser(state, payload) {
-		console.log(payload)
 		Vue.set(state.users, payload.userId, payload.userDetails)
 	}
 }
@@ -93,7 +92,9 @@ const actions = {
 	}
 }
 const getters = {
-
+	users: state => {
+		return state.users
+	}
 }
 
 export default {
