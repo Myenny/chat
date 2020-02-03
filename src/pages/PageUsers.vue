@@ -4,9 +4,9 @@
   		class="full-width"
   		separator>
   	  <q-item
-  	  	v-for="user in users"
-  	  	:key="user.id"
-  	  	to="/chat"
+  	  	v-for="(user, key) in users"
+  	  	:key="key"
+  	  	:to="'/chat/' + key"
   	  	clickable
   	  	v-ripple>
   	    <q-item-section avatar>

@@ -1,15 +1,23 @@
 <template>
-  <q-page class="flex column">
-  	<q-banner class="bg-grey-4 text-center">
-      User is offline.
+  <q-page 
+		ref="pageChat"
+	  class="page-chat flex column">
+  	<q-banner 
+	  v-if="!otherUserDetails.online"
+	  class="bg-grey-4 text-center fixed-top">
+	  
+      {{ otherUserDetails.name }} is offline.
     </q-banner>
-  	<div class="q-pa-md column col justify-end">
+  	<div 
+	  :class="{'invisible' : !showMessages }"
+	  class="q-pa-md column col justify-end">
   		<q-chat-message
-  			v-for="message in messages"
-  			:key="message.text"
-  		  :name="message.from"
+  			v-for="(message, key) in messages"
+  			:key="key"
+  		  :name="message.from == 'me' ? userDetails.name : otherUserDetails.name"
   		  :text="[message.text]"
   		  :sent="message.from == 'me' ? true : false"
+		  :bg-color="message.from == 'me' ? 'white': 'blue'"
   		/>
   	</div>
   	<q-footer elevated>
@@ -17,6 +25,7 @@
   	  	<q-form
   	  		class="full-width">
 	  	    <q-input
+			  	ref="newMessage"
 	  	    	v-model="newMessage"
 	  	    	bg-color="white"
 	  	    	outlined
@@ -41,36 +50,85 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import mixinOtherUserDetails from 'src/mixins/mixin-other-user-details.js'
+
 	export default {
+	  mixins: [mixinOtherUserDetails],
 	  data() {
 	  	return {
-	  		newMessage: '',
-	  		messages: [
-	  			{
-	  				text: 'Hey Jim, how are you?',
-	  				from: 'me'
-	  			},
-	  			{
-	  				text: 'Good thanks, Danny! How are you?',
-	  				from: 'them'
-	  			},
-	  			{
-	  				text: 'Pretty good!',
-	  				from: 'me'
-	  			}
-	  		]
+			  newMessage: '',
+			  showMessages: false,
 	  	}
 	  },
+	  computed: {
+		...mapState('store', ['messages', 'userDetails']),
+	  },
 	  methods: {
+		...mapActions('store', ['firebaseGetMessages', 'firebaseStopGettingMessages',
+		'firebaseSendMessage']),
 	  	sendMessage() {
-	  		this.messages.push({
-	  			text: this.newMessage,
-	  			from: 'me'
-	  		})
-	  	}
+	  		this.firebaseSendMessage({
+				message: {
+					text: this.newMessage,
+	  				from: 'me'
+				},
+				otherUserId: this.$route.params.otherUserId,
+			  })
+			  this.clearMessage()
+		  },
+		  clearMessage() {
+			  this.newMessage = ''
+			  this.$refs.newMessage.focus()
+		  },
+		  scrollToBottom() {
+			let pageChat = this.$refs.pageChat.$el
+			setTimeout(() => {
+				window.scrollTo(0, pageChat.scrollHeight)
+			}, 20)
+		  }
+	  },
+	  watch: {
+		  messages: function(val) {
+			if(Object.keys(val).length) {
+				this.scrollToBottom()
+				setTimeout(() => {
+					this.showMessages = true
+				}, 200)
+			}
+			
+		  }
+	  },
+	  mounted() {
+		  this.firebaseGetMessages(this.$route.params.otherUserId)
+	  },
+	  destroyed() {
+		  this.firebaseStopGettingMessages()
 	  }
 	}
 </script>
 
-<style>
+<style lang="stylus">
+	.page-chat
+		background #C8D3A7
+		&:after
+			content ''
+			display block
+			position fixed
+			left 0
+			right 0
+			top 0
+			bottom 0
+			z-index 0
+			opacity 0.1
+			background-image: radial-gradient(closest-side, transparent 0%, transparent 75%, #B6CC66 76%, #B6CC66 85%, #EDFFDB 86%, #EDFFDB 94%, #FFFFFF 95%, #FFFFFF 103%, #D9E6A7 104%, #D9E6A7 112%, #798B3C 113%, #798B3C 121%, #FFFFFF 122%, #FFFFFF 130%, #E0EAD7 131%, #E0EAD7 140%),
+			radial-gradient(closest-side, transparent 0%, transparent 75%, #B6CC66 76%, #B6CC66 85%, #EDFFDB 86%, #EDFFDB 94%, #FFFFFF 95%, #FFFFFF 103%, #D9E6A7 104%, #D9E6A7 112%, #798B3C 113%, #798B3C 121%, #FFFFFF 122%, #FFFFFF 130%, #E0EAD7 131%, #E0EAD7 140%)
+			background-size: 110px 110px
+			background-position: 0 0, 55px 55px
+	.q-message
+		z-index 1
+	.q-banner
+		top 50px
+		z-index 2
+		opacity 0.8
 </style>
