@@ -1,10 +1,12 @@
 
 const routes = [
   {
+    mode: 'history',
+    base: process.env.BASE_URL,
     path: '/',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/PageUsers.vue') },
+      { path: '/users', component: () => import('pages/PageUsers.vue') },
       { path: '/auth', component: () => import('pages/PageAuth.vue') },
       { path: '/chat/:otherUserId', component: () => import('pages/PageChat.vue') },
     ]

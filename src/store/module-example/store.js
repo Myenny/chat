@@ -73,7 +73,7 @@ const actions = {
 					}
 				})
 				dispatch('firebaseGetUsers')
-				this.$router.push('/')
+				this.$router.push('/users')
 			} else {
 				//user is signed out
 				dispatch('firebaseUpdateUser', {

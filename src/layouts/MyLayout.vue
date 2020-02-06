@@ -2,6 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
+        <div class="absolute-left q-pt-sm">
         <q-btn
           flat
           dense
@@ -11,13 +12,15 @@
           aria-label="Menu"
         />
 
-                <q-btn
+        <q-btn
           v-if="$route.fullPath.includes('/chat')"
           v-go-back.single
           icon="arrow_back"
           flat
           dense
-          label="Back" />
+          label="Back" 
+        />
+        </div>
 
         <q-toolbar-title class="absolute-center">
           {{title}}
@@ -54,64 +57,60 @@
       bordered
       content-class="bg-grey-2"
     >
-      <q-list>
-        <q-item-label header>Essential Links</q-item-label>
-        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="school" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Docs</q-item-label>
-            <q-item-label caption>quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://github.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="code" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Github</q-item-label>
-            <q-item-label caption>github.com/quasarframework</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://chat.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="chat" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Discord Chat Channel</q-item-label>
-            <q-item-label caption>chat.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://forum.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="record_voice_over" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Forum</q-item-label>
-            <q-item-label caption>forum.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://twitter.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="rss_feed" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Twitter</q-item-label>
-            <q-item-label caption>@quasarframework</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://facebook.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="public" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Facebook</q-item-label>
-            <q-item-label caption>@QuasarFramework</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-drawer>
+       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
+          <q-list padding>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="inbox" />
+              </q-item-section>
+
+              <q-item-section>
+                Inbox
+              </q-item-section>
+            </q-item>
+
+            <q-item active clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="star" />
+              </q-item-section>
+
+              <q-item-section>
+                Star
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="send" />
+              </q-item-section>
+
+              <q-item-section>
+                Send
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="drafts" />
+              </q-item-section>
+
+              <q-item-section>
+                Drafts
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-scroll-area>
+
+        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+          <div class="absolute-bottom bg-transparent">
+            <q-avatar size="56px" class="q-mb-sm">
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+            </q-avatar>
+            <div class="text-weight-bold">Michael</div>
+            <div>@michael</div>
+          </div>
+        </q-img>
+      </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -127,6 +126,7 @@ export default {
   mixins: [mixinOtherUserDetails],
   name: 'MyLayout',
   computed: {
+    leftDrawerOpen: false,
     ...mapState('store', ['userDetails']),
     title() {
       let currentPath = this.$route.fullPath
@@ -147,7 +147,15 @@ export default {
 </script>
 
 <style lang="stylus">
+  .platform-ios
+    .q-header
+      .q-btn, .q-toolbar__title
+        padding-top constant(safe-area-inset-top)
+        padding-top env(safe-area-inset-top)
   .q-toolbar
     .q-btn
       line-height: 1.2
+  .menu-list, .q-item
+    border-radius: 0 32px 32px 0
+
 </style>
