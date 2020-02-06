@@ -4,6 +4,7 @@
       <q-toolbar>
         <div class="absolute-left q-pt-sm">
         <q-btn
+          v-if="!$route.fullPath.includes('/auth')"
           flat
           dense
           round
