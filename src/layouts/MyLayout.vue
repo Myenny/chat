@@ -53,7 +53,6 @@
 
     <q-drawer
       v-model="leftDrawerOpen"
-      show-if-above
       bordered
       content-class="bg-grey-2"
     >
@@ -126,7 +125,6 @@ export default {
   mixins: [mixinOtherUserDetails],
   name: 'MyLayout',
   computed: {
-    leftDrawerOpen: false,
     ...mapState('store', ['userDetails']),
     title() {
       let currentPath = this.$route.fullPath
