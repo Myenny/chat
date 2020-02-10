@@ -57,7 +57,7 @@
       bordered
       content-class="bg-grey-2"
     >
-       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
+       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #fff">
           <q-list padding>
             <q-item clickable v-ripple>
               <q-item-section avatar>
@@ -69,7 +69,7 @@
               </q-item-section>
             </q-item>
 
-            <q-item active clickable v-ripple>
+            <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="star" />
               </q-item-section>
@@ -79,13 +79,13 @@
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple>
+            <q-item active clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="send" />
+                <q-icon name="chat" />
               </q-item-section>
 
               <q-item-section>
-                Send
+                Chat
               </q-item-section>
             </q-item>
 
@@ -106,8 +106,8 @@
             <q-avatar size="56px" class="q-mb-sm">
               <img src="https://cdn.quasar.dev/img/boy-avatar.png">
             </q-avatar>
-            <div class="text-weight-bold">Michael</div>
-            <div>@michael</div>
+            <div class="text-weight-bold">{{ userDetails.name }}</div>
+            <div>@{{ userDetails.name }}</div>
           </div>
         </q-img>
       </q-drawer>
