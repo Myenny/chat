@@ -27,6 +27,7 @@
 	  	    <q-input
 			  	ref="newMessage"
 	  	    	v-model="newMessage"
+			    v-on:keyup.enter="sendMessage"
 	  	    	bg-color="white"
 	  	    	outlined
 	  	    	rounded
