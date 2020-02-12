@@ -69,7 +69,7 @@
               <q-icon name="star" />
             </q-item-section>
 
-            <q-item-section>iStar</q-item-section>
+            <q-item-section>Star</q-item-section>
           </q-item>
 
           <q-item active clickable v-ripple>
